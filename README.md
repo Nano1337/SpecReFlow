@@ -4,6 +4,7 @@ The official implementation of [SpecFlow, *SPIE Photonics West 2023*](https://sp
 Contact: [haoli.yin@vanderbilt.edu](mailto:haoli.yin@vanderbilt.edu). More info about me at my [personal website](https://haoliyin.me/). Feel free to reach out with any questions or discussion!
 
 # Demo 
+Note: This may take a few seconds to load in. 
 ![teaser](./figs/croppedgif.gif)
 
 ## Installation
