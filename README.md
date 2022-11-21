@@ -3,15 +3,10 @@ The official implementation of SpecFlow, *SPIE Photonics West 2023*
 
 Contact: [haoli.yin@vanderbilt.edu](mailto:haoli.yin@vanderbilt.edu). Feel free to reach out with any questions or discussion!
 
-## Abstract
-
-## Highlights
+# Demo 
+![teaser](./figs/croppedgif.gif)
 
 ## Installation
+Note: This is a work in progress, model weights and data will be made available soon. 
 Please refer to [INSTALL.md](docs/INSTALL.md) for installation instructions.
 
-
-# CURRENT TODOS: 
-* Test that frame detection works and input video -> detected SR regions marked in green -> output video
-* Test that restoration works for batch of frames and input video -> restoration SR video -> output video
-* 
