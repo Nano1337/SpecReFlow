@@ -1,9 +1,9 @@
 
 import torch
 from torch import nn
-from unet_modules.helper import get_conv_layer
-from unet_modules.DownBlock import DownBlock
-from unet_modules.UpBlock import UpBlock
+from .unet_modules.helper import get_conv_layer
+from .unet_modules.DownBlock import DownBlock
+from .unet_modules.UpBlock import UpBlock
 
 class UNet(nn.Module):
     def __init__(self,
@@ -94,7 +94,7 @@ class UNet(nn.Module):
             self.weight_init(module, method_weights, **kwargs_weights)  # initialize weights
             self.bias_init(module, method_bias, **kwargs_bias)  # initialize bias
 
-    def forward(self, x: torch.tensor):
+    def forward(self, x):
         encoder_output = []
 
         # Encoder pathway

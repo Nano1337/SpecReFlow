@@ -2,13 +2,14 @@ import cv2
 import torch
 import numpy as np
 
-def reflection_enhance(norm_img):
+def reflection_enhance(img):
     """
     Enhancement to better contrast the specular reflection against the background tissue
     :param norm_img: Normalized image
     :return: Enhanced image
     """
-    hsv = cv2.cvtColor(norm_img, cv2.COLOR_RGB2HSV)
+    norm_img = np.float32(cv2.normalize(img.astype('float'), None, 0.0, 1.0, cv2.NORM_MINMAX))
+    hsv = cv2.cvtColor(norm_img, cv2.COLOR_RGB2HSV) 
     s = hsv[:, :, 1]
     for i in range(3):
         norm_img[:, :, i] = (1 - s) * norm_img[:, :, i]
@@ -124,4 +125,4 @@ def bytescale(data, cmin=None, cmax=None, high=255, low=0):
 
     scale = float(high - low) / cscale
     bytedata = (data - cmin) * scale + low
-    return (bytedata.clip(low, high) + 0.5).astype(uint8)
+    return (bytedata.clip(low, high) + 0.5).astype(np.uint8)

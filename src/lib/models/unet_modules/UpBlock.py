@@ -1,5 +1,5 @@
 from torch import nn
-from helper import get_conv_layer, get_up_layer, autocrop, get_activation, get_normalization
+from .helper import Concatenate, get_conv_layer, get_up_layer, autocrop, get_activation, get_normalization
 
 class UpBlock(nn.Module):
     """

@@ -27,7 +27,7 @@ class Singleton:
         self.stream.height = height
         self.stream.width = width
         self.stream.pix_fmt = 'yuv420p'
-        self.stream.options = {'crf': '24', 'preset': 'ultrafast'}
+        self.stream.options = {'crf': '0', 'preset': 'ultrafast'}
 
     def write(self, frame):
         """

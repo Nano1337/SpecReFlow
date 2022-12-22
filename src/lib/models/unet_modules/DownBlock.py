@@ -1,6 +1,6 @@
 
 from torch import nn
-from helper import get_conv_layer, get_activation, get_normalization, get_maxpool_layer
+from .helper import get_conv_layer, get_activation, get_normalization, get_maxpool_layer
 
 class DownBlock(nn.Module):
     """
@@ -35,10 +35,7 @@ class DownBlock(nn.Module):
                                     bias=True, dim=self.dim)
         self.conv2 = get_conv_layer(self.out_channels, self.out_channels, kernel_size=3, stride=1, padding=self.padding,
                                     bias=True, dim=self.dim)
-
-        # pooling layer
-        if self.pooling:
-            self.pool = get_maxpool_layer(kernel_size=2, stride=2, padding=0, dim=self.dim)
+        self.pool = get_maxpool_layer(kernel_size=2, stride=2, padding=0, dim=self.dim)
 
         # activation layers
         self.act1 = get_activation(self.activation)

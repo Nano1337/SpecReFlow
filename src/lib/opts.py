@@ -31,8 +31,6 @@ class opts(object):
         opt.input_h = opt.input_h if opt.input_h > 0 else input_h
         opt.input_w = opt.input_w if opt.input_w > 0 else input_w
 
-
-
         return opt
 
     def init(self, args=''):

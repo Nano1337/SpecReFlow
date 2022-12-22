@@ -13,8 +13,6 @@ Our proposed SpecFlow consists of two phases: (1) a detection phase where the SR
 
 Comprehensive quantitative and qualitative tests for each phase conducted on several different endoscopy modalities reveal that our SpecFlow solution is competitive with current state-of-the-art models. Our detection pipeline achieves a Dice score of 82.8% while only requiring 14ms of computational time, allowing for real-time processing and our restoration pipeline successfully incorporates temporal information for more accurate restorations. 
 
-
-
 ## Installation
 Note: This is a work in progress, model weights and data will be made available soon. 
 
