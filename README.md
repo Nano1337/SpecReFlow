@@ -1,5 +1,5 @@
-# SpecFlow: A Specular Reflection Restoration Framework using Flow-Guided Video Completion
-The official implementation of [SpecFlow, *SPIE Photonics West 2023*](https://spie.org/photonics-west/presentation/SpecFlow--an-end-to-end-framework-for-specular-reflection/12368-22?SSO=1)
+# SpecReFlow: A Specular Reflection Restoration Framework using Flow-Guided Video Completion
+The official implementation of [SpecReFlow, *SPIE Photonics West 2023*](https://spie.org/photonics-west/presentation/SpecFlow--an-end-to-end-framework-for-specular-reflection/12368-22?SSO=1)
 
 Contact: [haoli.yin@vanderbilt.edu](mailto:haoli.yin@vanderbilt.edu). More info about me at my [personal website](https://haoliyin.me/). Feel free to reach out with any questions or discussion!
 # Demo 
