@@ -84,9 +84,9 @@ class Trainer:
 
             batch_iter.set_description(f'Training: (loss {loss_value:.4f})')  # update progressbar
 
-        self.logger.write('Epoch: {} - Training loss: {}'.format(self.epoch, np.mean(train_losses)))
+        self.logger.write('Epoch: {} - Training loss: {}\n'.format(self.epoch, np.mean(train_losses)))
         self.training_loss.append(np.mean(train_losses))
-        self.logger.write('Epoch: {} - Learning rate: {}'.format(self.epoch, self.optimizer.param_groups[0]['lr']))
+        self.logger.write('Epoch: {} - Learning rate: {}\n'.format(self.epoch, self.optimizer.param_groups[0]['lr']))
         self.learning_rate.append(self.optimizer.param_groups[0]['lr'])
 
         batch_iter.close()
@@ -115,5 +115,5 @@ class Trainer:
                 batch_iter.set_description(f'Validation: (loss {loss_value:.4f})')
 
         self.validation_loss.append(np.mean(valid_losses))
-        self.logger.write('Epoch: {} - Validation loss: {}'.format(self.epoch, np.mean(valid_losses)))
+        self.logger.write('Epoch: {} - Validation loss: {}\n'.format(self.epoch, np.mean(valid_losses)))
         batch_iter.close()

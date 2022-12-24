@@ -20,7 +20,7 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from config import cfg, update_config
 from logger import Logger
 from datasets.unet_sample import SegmentationDataSet
-from utils.image import create_dense_target, normalize_01, ComposeDouble, AlbuSeg2d, FunctionWrapperDouble
+from utils.image import create_dense_target, normalize_01, ComposeDouble, AlbuSeg2d, FunctionWrapperDouble, plot_training
 from models.unet import get_unet
 from models.losses import DiceLoss
 from trains.unet_trainer import Trainer
@@ -176,7 +176,12 @@ def main(cfg):
 
     training_losses, validation_losses, lr_rates = trainer.run_trainer()
 
+    # log training visualization
+    if cfg.TRAIN.VISUALIZE:
+        fig = plot_training(training_losses, validation_losses, lr_rates, gaussian=True, sigma=1, figsize=(10, 4))
+        fig.savefig(os.path.join(logger.log_dir, 'training.png'))
 
+    print('Training complete!')
 
 if __name__ == '__main__':
     """ 
