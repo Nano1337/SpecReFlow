@@ -31,6 +31,7 @@ _C.MODEL.DIM = 2
 
 # Training related params
 _C.TRAIN = CN()
+_C.TRAIN.PRETRAINED_WEIGHTS = ''
 _C.TRAIN.OPTIMIZER = 'adam'
 _C.TRAIN.LR = 0.001
 _C.TRAIN.CRITERION = 'dice'

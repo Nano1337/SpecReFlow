@@ -134,7 +134,10 @@ def main(cfg):
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     model = get_unet(cfg, device)
 
-    # TODO: load in pretrained weights if applicable
+    # load pretrained weights
+    if cfg.TRAIN.PRETRAINED_WEIGHTS:
+        print('Loading pretrained weights...')
+        model.load_state_dict(torch.load(cfg.TRAIN.PRETRAINED_WEIGHTS))
 
     # set up logger
     logger = Logger(cfg)
@@ -181,6 +184,8 @@ def main(cfg):
         fig = plot_training(training_losses, validation_losses, lr_rates, gaussian=True, sigma=1, figsize=(10, 4))
         fig.savefig(os.path.join(logger.log_dir, 'training.png'))
 
+    # save model
+    torch.save(model.state_dict(), os.path.join(logger.log_dir, 'model.pth'))
     print('Training complete!')
 
 if __name__ == '__main__':
