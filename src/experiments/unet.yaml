@@ -1,0 +1,28 @@
+
+SEED: 42
+OUTPUT_DIR: '/home/main/snap/SpecReFlow/src/lib/output'
+DATASET: 
+  DATA_DIR: '/home/main/snap/SpecReFlow/src/data/combined_set'
+  TRAIN_SIZE: 0.8 # 80% of the data is used for training
+  HEIGHT: 288
+  WIDTH: 384
+
+MODEL: 
+  IN_CHANNELS: 3
+  OUT_CHANNELS: 1
+  N_BLOCKS: 4
+  START_FILTERS: 8
+  ACTIVATION: 'relu'
+  NORMALIZATION: 'batch'
+  CONV_MODE: 'same'
+  DIM: 2
+
+TRAIN:
+  OPTIMIZER: 'adam'
+  LR: 0.001
+  CRITERION: 'dice'
+  PATIENCE: 10
+  DECAY_FACTOR: 0.1
+  BATCH_SIZE: 8
+  NUM_EPOCHS: 120
+  START_EPOCH: 0

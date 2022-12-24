@@ -115,3 +115,17 @@ class UNet(nn.Module):
         attributes = {attr_key: self.__dict__[attr_key] for attr_key in self.__dict__.keys() if '_' not in attr_key[0] and 'training' not in attr_key}
         d = {self.__class__.__name__: attributes}
         return f'{d}'
+
+def get_unet(cfg, device): 
+
+    model = UNet(in_channels=cfg.MODEL.IN_CHANNELS,
+             out_channels=cfg.MODEL.OUT_CHANNELS,
+             n_blocks=cfg.MODEL.N_BLOCKS,
+             start_filters=cfg.MODEL.START_FILTERS,
+             activation=cfg.MODEL.ACTIVATION,
+             normalization=cfg.MODEL.NORMALIZATION,
+             conv_mode=cfg.MODEL.CONV_MODE,
+             dim=cfg.MODEL.DIM
+             ).to(device)
+             
+    return model 
