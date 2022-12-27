@@ -9,3 +9,22 @@ All training configurations for the Unet can be found in the [experiments](../ex
 ```
 python3 train.py --cfg /path/to/unet.yaml
 ```
+
+## Reproducing Results
+
+To ensure reliability of our results, we provide the following scripts to reproduce the figures and tables found in the paper. Please note that the results may vary slightly due to randomness in the training process and that paper figures were manually arranged in MS PowerPoint after images for those figures were generated using this code. 
+
+### Reproducing Figures
+To produce all figures, navigate to the 'src/lib' directory and run the following command:
+
+```
+python3 create_all_figs.py
+```
+The output images used in each figure will be found in the figs directory at the root of the project.
+
+### Reproducing Tables
+To produce all tables, navigate to the 'src/lib' directory and run the following command:
+
+```
+TODO: TO BE FILLED IN
+```

@@ -129,3 +129,19 @@ def get_unet(cfg, device):
              ).to(device)
              
     return model 
+
+def get_premade_unet():
+    model = UNet(in_channels=3,
+        out_channels=1,
+        n_blocks=4,
+        start_filters=8,
+        activation='relu',
+        normalization='batch',
+        conv_mode='same',
+        dim=2
+        ).to('cuda')
+    
+    # load model weights
+    model.load_state_dict(torch.load('../data/unetv5.pt'))
+
+    return model
