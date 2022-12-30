@@ -10,6 +10,7 @@ def fit_image(image):
     Check image dimensions to see if it's divisible by 8, if not then cut either side to make it so
     """
     h, w = image.shape[:2]
+    h1, h2, w1, w2 = 0, 0, 0, 0
     if h % 8 != 0:
         h = h % 8 
         if h % 2 != 0: 
@@ -25,7 +26,7 @@ def fit_image(image):
         else:
             w2 = w1 = w // 2
 
-    fit_img = image[h1:-h2, w1:-w2]
+    fit_img = image[h1:-h2 if h2 != 0 else h, w1:-w2 if w2 != 0 else w]
     return fit_img
 
 def predict(img, model, preprocess, postprocess, device):

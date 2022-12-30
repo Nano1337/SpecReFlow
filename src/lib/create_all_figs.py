@@ -7,6 +7,6 @@ from create_figs.create_fig_6 import make_fig_6
 if __name__ == "__main__":
     # make_fig_1_2_4()
     # make_fig_3()
-    # make_fig_5()
-    make_fig_6()
+    make_fig_5()
+    # make_fig_6()
     
