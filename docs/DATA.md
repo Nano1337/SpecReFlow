@@ -2,7 +2,7 @@
 
 If you want to reproduce the results in the paper for benchmark evaluation and training, you will need to setup the dataset. 
 
-## CVC-EndoSceneStill
+## CVC-EndoSceneStill dataset
 - First, navigate to the `data` folder:
 - Download the dataset by running the following commands:
 ```
@@ -17,6 +17,35 @@ unzip generatedMasks184.zip
 gdown 12mmojapoxxLI02yaqwZpqvc-0DVkpf6p
 gdown 1eXO9k59fFPy9OqWe6X2I9ld5Po_4YGgk
 ```
+
+## GLENDA dataset
+To reproduce restoration experiments, please download the following dataset. Note that this zip file is quite large (1.78GB): 
+
+```
+gdown 1-5oNACHxzapHaN-FWIO1uUm_VuOC3yVM
+unzip GLENDA_set_all.zip
+rm  GLENDA_set_all.zip
+cd content
+mv GLENDA_set_all ..
+rmdir content
+```
+This processed GLENDA dataset folder contains 13 trials of 100 images each as described in the paper. Each trial is stored in a separate folder. Each folder structure is as follows: 
+
+```
+.
+    ├── ...
+    ├── GLENDA_set_1_final               # Trial number
+    │   ├── GLENDA_set_1_gt              # Ground Truth Images
+    │   ├── GLENDA_set_1_mask            # Random Binary Masks
+    │   ├── GLENDA_set_1_img             # Masks imposed onto images
+    │   ├── deepfill_output              # Restoration by Deepfillv2
+    │   ├── LaMa_output                  # Restoration by LaMa
+    │   ├── fgt_output                   # Restoration by FGT
+    │   ├── e2fgvc_output                # Restoration by E2FGVI
+    │   └── fgvc_output                  # Restoration by FGVC                
+    └── ...
+```
+
 
 Optionally, you may remove the zip files to save space by running:
 ```
