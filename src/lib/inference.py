@@ -62,7 +62,7 @@ def threshold(img, modality):
     
     return output.astype(np.uint8)
 
-def infer(image, model, use_enhanced=False, use_threshold=False, use_model=True, use_dilation=False):
+def infer(image, model=None, use_enhanced=False, use_threshold=False, use_model=True, use_dilation=False):
     """
     Run inference on an image using a combination of preprocessed image, model, thresholding, or dilation
     :param: image: raw image to run inference on
@@ -87,6 +87,8 @@ def infer(image, model, use_enhanced=False, use_threshold=False, use_model=True,
         img = reflection_enhance(img)
 
     if use_model:
+        if model is None:
+            assert "You must pass in a model to use the model"
         output1 = unet(img, model)
 
     if use_threshold:
