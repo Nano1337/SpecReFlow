@@ -1,0 +1,1 @@
+2022-12-24-09-01: Epoch: 1 - Training loss: 0.9246899739901224Epoch: 1 - Learning rate: 0.001Epoch: 1 - Validation loss: 0.8758166306897214Epoch: 2 - Training loss: 0.7768401217460632Epoch: 2 - Learning rate: 0.001Epoch: 2 - Validation loss: 0.6039871855785972

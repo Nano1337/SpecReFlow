@@ -1,0 +1,5 @@
+==> torch version: 1.13.0+cu117
+==> cudnn version: 8500
+==> Cmd:
+['train.py', '--cfg', '/home/main/snap/SpecReFlow/src/experiments/unet.yaml']
+==> Opt:

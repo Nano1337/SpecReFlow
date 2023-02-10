@@ -95,7 +95,7 @@ def make_restoration_metrics():
 
     root = '../data/GLENDA_set_all/'
 
-    for count in range(10, 14): # TODO change first index back to 1
+    for count in range(1, 14):
         print("Working on GLENDA_set_{}".format(count))
 
         trial_dir = os.path.join(root, 'GLENDA_set_' + str(count) + "_final")
@@ -113,6 +113,9 @@ def make_restoration_metrics():
 
         print("Finished GLENDA_set_{}".format(count))
 
+        # reset dataframe
+        df = pd.DataFrame(columns=['Method', 'Metric', 'Average', 'All 50 values'])
+
 def sigtest_helper(avgs, metric, algos, f_a, s_a, f_b, s_b):
     a, b = [], []
     num_cat = 4
@@ -120,10 +123,96 @@ def sigtest_helper(avgs, metric, algos, f_a, s_a, f_b, s_b):
         a.append(avgs[i][metric[f_a] + algos[s_a]*num_cat])
         b.append(avgs[i][metric[f_b] + algos[s_b]*num_cat])
 
-    t, p = stats.ttest_rel(a, b)
+    t, p = stats.ttest_ind(a, b)
     
     print("Metric: {}, Algo1: {}, Algo2: {}, p-value: {}".format(f_a, s_a, s_b, p))
- 
+    
+
+def sigtest_helper_use_all(avgs, metric, algos, f_a, s_a, f_b, s_b):
+    a, b = [], []
+    num_cat = 4
+    print(f_a, s_a, f_b, s_b)
+    for i in range(13):
+        a.extend(avgs[i][metric[f_a] + algos[s_a]*num_cat])
+        b.extend(avgs[i][metric[f_b] + algos[s_b]*num_cat])
+        print(a)
+        print(b)
+        break
+
+    print(stats.wilcoxon(a, b))
+    return 0
+    # plot a distribution of the differences between lists a and b to see if they are normally distributed
+    # Calculate the differences between the two lists
+    # differences = [a[i] - b[i] for i in range(len(a))]
+
+    # # normalize values using numpy
+    # output = np.array(differences)
+    # # output = (output - np.mean(output)) / np.std(output)
+
+    # # Plot the histogram
+    # plt.hist(output)
+
+    # # Label the axes
+    # plt.xlabel('Difference')
+    # # make more ticks on the x axis
+    # # plt.xticks(np.arange(-0.02, 0.02, 0.005))
+    # plt.ylabel('Frequency')
+
+    # plt.savefig("../../figs/fig_7_8/normally_distributed_check.png")   
+    
+
+    res = stats.ttest_rel(a, b)
+    print(res)
+    print(np.std(a), np.std(b))
+    # t, p = stats.ttest_rel(a, b)
+    
+    # print("Metric: {}, Algo1: {}, Algo2: {}, p-value: {}".format(f_a, s_a, s_b, p))
+
+def create_significance_testing_use_all(csv_paths, output_path):
+    dfs, avgs = [], []
+
+    # read from csv files
+    for i in range(len(csv_paths)):
+        dfs.append(pd.read_csv(csv_paths[i]))
+
+        # get column of averages for each metric and remove NaN values and convert to numpy
+        avgs.append(dfs[i].loc[:, 'All 50 values'])
+        avgs[i] = avgs[i].dropna()
+        avgs[i] = avgs[i].to_numpy()
+        avgs[i] = np.array([np.array(xi.strip('[]').split(', ')).astype(float) for xi in avgs[i]])
+
+    # maps for interpretability reasons
+    metric = {
+        "SSIM": 0,
+        "PSNR": 1,
+        "mSSIM": 2,
+        "mPSNR": 3
+    }
+
+    algos = {
+        "SR": 0,
+        "FGT": 1,
+        "FGVC": 2,
+        "E2FGVI": 3,
+        "DeepFillv2": 4,
+        "LaMa": 5
+    }
+
+    metric_names = ['SSIM', 'PSNR', 'mSSIM', 'mPSNR']
+    flow_based = ['FGT', 'FGVC', 'E2FGVI']
+    inpaint_based = ['DeepFillv2', 'LaMa']
+
+    # print("Begin significance testing")
+    # with open('../../figs/fig_7_8/restoration_metrics_significance_testing_use_all.txt', 'w') as f:
+    #     with contextlib.redirect_stdout(f): # redirect print statements to text file
+
+    for i in metric_names:
+        for j in flow_based:
+            for k in inpaint_based:
+                sigtest_helper_use_all(avgs, metric, algos, i, j, i, k)
+                return 0
+    print("End significance testing")
+
 def create_significance_testing(csv_paths, output_path):
     dfs, avgs = [], []
 
@@ -153,7 +242,7 @@ def create_significance_testing(csv_paths, output_path):
         "LaMa": 5
     }
 
-    metric_names = ['mSSIM', 'mPSNR']
+    metric_names = ['SSIM', 'PSNR', 'mSSIM', 'mPSNR']
     flow_based = ['FGT', 'FGVC', 'E2FGVI']
     inpaint_based = ['DeepFillv2', 'LaMa']
 
@@ -188,7 +277,7 @@ def plot_fig(x_pos, means, stds, cat_var, output_path, title):
 
     # Save the figure 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_path, 'fig_7_8_{}.png'.format(title)))
+    plt.savefig(os.path.join(output_path, 'fig_7_8_{}.svg'.format(title)), format='svg')
 
 def create_figures(csv_paths, output_path):
     """
@@ -251,9 +340,12 @@ def make_fig_7_8():
     output_path = "../../figs/fig_7_8/"
     csv_paths = "../data/restoration_metrics/"
     csv_paths = [os.path.join(csv_paths, i) for i in os.listdir(csv_paths)]
-    
-    # # conduct significance testing
+    csv_paths.sort()
+
+    # conduct significance testing
     # create_significance_testing(csv_paths, output_path)
+
+    # create_significance_testing_use_all(csv_paths, output_path)
 
     # create figures from data
     create_figures(csv_paths, output_path)
