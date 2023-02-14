@@ -1,9 +1,9 @@
 
 SEED: 42
-OUTPUT_DIR: '/home/main/snap/SpecReFlow/src/lib/output'
+OUTPUT_DIR: 'output'
 
 DATASET: 
-  DATA_DIR: '/home/main/snap/SpecReFlow/src/data/combined_set'
+  DATA_DIR: '../data/combined_set'
   TRAIN_SIZE: 0.8 # 80% of the data is used for training
   HEIGHT: 288
   WIDTH: 384

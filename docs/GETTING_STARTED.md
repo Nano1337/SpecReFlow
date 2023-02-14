@@ -26,5 +26,5 @@ The output images used in each figure will be found in the figs directory at the
 To produce all tables, navigate to the 'src/lib' directory and run the following command:
 
 ```
-TODO: TO BE FILLED IN
+python3 create_all_tables.py
 ```

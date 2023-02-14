@@ -132,6 +132,7 @@ def main(cfg):
     # set up model
     print('Creating model...')
     device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
+    print('Using device: {}'.format(device))
     model = get_unet(cfg, device)
 
     # load pretrained weights
