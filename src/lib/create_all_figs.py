@@ -4,6 +4,7 @@ from create_figs.create_fig_3 import make_fig_3
 from create_figs.create_fig_5 import make_fig_5
 from create_figs.create_fig_6 import make_fig_6
 from create_figs.create_fig_7_8 import make_fig_7_8
+from create_figs.create_fig_9 import make_fig_9
 
 if __name__ == "__main__":
     make_fig_1_2_4()
@@ -11,4 +12,5 @@ if __name__ == "__main__":
     make_fig_5()
     make_fig_6()
     make_fig_7_8()
+    make_fig_9()
     
