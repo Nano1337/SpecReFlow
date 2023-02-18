@@ -1,8 +1,13 @@
+# FIXME: end to end demo script is still work in progress
+# TODO: update SETUP.md with how to run requirements.txt from FGT
+# TODO: update SETUP.md with how to clone FGT and alter requirements.txt (easiest fix is to just incorporate FGT's requirements.txt into existing one)
 
 # file processing libraries
 import os
 import cv2
 import numpy as np
+import argparse
+import subprocess
 from lib.utils.image import reflection_enhance
 from lib.utils.image import preprocess, postprocess
 
@@ -42,7 +47,7 @@ def get_model():
                 conv_mode='same',
                 dim=2).to(device)
 
-    model_name = 'unetv5.pt'
+    model_name = 'data/unetv5.pt'
     model_weights = model_name # change path to model weights
     model.load_state_dict(torch.load(model_weights))
 
@@ -50,16 +55,22 @@ def get_model():
 
     return model
 
-def create_detection_frame(img=None, model=get_model(), img_path=None):
+def create_detection_frame(args, img=None, model=get_model(), img_path=None, save_frames=False, count=0):
     
     if img_path: 
         img = cv2.imread(img_path)
     
     img = pad_image(img)
+    
+    # save original image
+    if save_frames:
+        cv2.imwrite(os.path.join("tempStorage", "frames", str(count).zfill(5) + '.png'), img)
+
+    # create copy of image
     copy = img.copy()
 
     # calculate enhanced image
-    enhanced = reflection_enhance(copy) # this is messed up
+    enhanced = reflection_enhance(copy)
 
     # DL model prediction 
     output1 = predict(enhanced, model, preprocess, postprocess, device)
@@ -78,15 +89,13 @@ def create_detection_frame(img=None, model=get_model(), img_path=None):
 
     # mask dilation
     kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(5,5))
-    output = cv2.dilate(output,kernel,iterations = 1)
-    output[output>0] = 1
+    output = cv2.dilate(output,kernel, iterations=1)
+    output[output>0] = 255
 
-    # apply mask to original image
-    copy[output==1] = [0, 255, 0]
+    # save output
+    if save_frames:
+        cv2.imwrite(os.path.join("tempStorage", "masks", str(count).zfill(5) + '.png'), output)
 
-    return img, output, copy
-
-# write a method that will take an input image and pad it have image dimensions divisible by 16
 def pad_image(img, pad_size=8):
 
     # get dimensions
@@ -101,78 +110,54 @@ def pad_image(img, pad_size=8):
 
     return img
 
-def create_detection_video(video_path, output_path, save_frames=False): 
+def main(args):
+    # create temp folder for video frames and detection output frames
+    if not os.path.exists(os.path.join('tempStorage', 'frames')):
+        os.mkdir(os.path.join('tempStorage', 'frames'))
 
-    # image and mask output directories
-    img_dir = r'C:\Users\haoli\OneDrive\Documents\SpecFLow\output\images'
-    mask_dir = r'C:\Users\haoli\OneDrive\Documents\SpecFLow\output\masks'
+    if not os.path.exists(os.path.join('tempStorage', 'masks')):
+        os.mkdir(os.path.join('tempStorage', 'masks'))
 
-    # iterate through all frames of video without saving individual frames
-    cap = cv2.VideoCapture(video_path)
+    print("Begin detection on video: " + args.video_path)
+
+    # read in all frames of a video and save to folder
+    cap = cv2.VideoCapture(args.video_path)
     success, img = cap.read()
+    
+    padded = pad_image(img)
+
     count = 0
-
-    # declare and initialize model
-    print("Warming up model...")
-    model = get_model()
-
-    # create video writer for output
-    img = pad_image(img)
-    out = cv2.VideoWriter(output_path,cv2.VideoWriter_fourcc('m','p','4','v'), 30, (img.shape[1],img.shape[0]))
-    print("Beginning video processing...")
-
+    print("Is video read in successfully? " + str(success))
     while success:
-        print("Processing frame " + str(count))
-
-        # run detection
-        img, output, copy = create_detection_frame(img=img, model=model)
-
-        # write to video
-        out.write(copy)
-        if save_frames:
-            cv2.imwrite(os.path.join(img_dir, str(count).zfill(5) + '.png'), img)
-            cv2.imwrite(os.path.join(mask_dir, str(count).zfill(5) + '.png'), output)
-
+        create_detection_frame(args, img, save_frames=True, count=count)
         count += 1
         success, img = cap.read()
 
-    print("Video processing complete.")
-    cap.release()
-    out.release()
+    print("Detection complete. Restoring video...")
+
+    # FIXME: figure out how relative paths work with subprocesses
+    subprocess.call(['python3', 'FGT/tool/video_inpainting.py', 
+                    '--imgH', str(padded.shape[0]), 
+                    '--imgW', str(padded.shape[1]),
+                    '--path', 'tempStorage/frames',
+                    '--path_mask', 'tempStorage/masks',
+                    '--outroot', os.path.dirname(args.video_path),
+    ])
+
+    # TODO: delete tempStorage subfolders after video restoration
+
+
+
 
 if __name__ == '__main__':
-    # video_path = 'D:\\Videos\\vid_raw.mp4'
-    # output_path = 'D:\\Videos\\vid_detected.mp4'
-    # create_detection_video(video_path, output_path, save_frames=True)
 
-    # test_image = '53.bmp'
-    # test_image = cv2.imread(test_image)
-    # output = create_detection_frame(img=test_image)
-    # cv2.imwrite('output.png', output)
-
-    # read in all frames of a video and store in numpy array
-    cap = cv2.VideoCapture('D:\\Videos\\vid_detected.mp4')
-    success, img = cap.read()
-    count = 0
-    frames = []
-    while success:
-        print("Working on frame " + str(count))
-        img = cv2.resize(img, (640, 496), interpolation=cv2.INTER_AREA)
-        frames.append(img)
-        count += 1
-        success, img = cap.read()
-
-    # convert to numpy array
-    frames = np.array(frames)
-
-    # save to file
-    np.save('vid_detected.npy', frames)
-
-    # read in numpy array and use cv2 to convert from BGR to RGB
-    frames = np.load('vid_detected.npy')
-    for i in range(frames.shape[0]):
-        frames[i] = cv2.cvtColor(frames[i], cv2.COLOR_BGR2RGB)
+    # take in command line arguments for input video path
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--video_path', type=str, default=r'data/demo/demo_vid.mp4', help='path to input video')
+    args = parser.parse_args()
+    main(args)
         
+
 
 
 
