@@ -16,5 +16,5 @@ Comprehensive quantitative and qualitative tests for each phase conducted on sev
 ## Installation
 Note: This is a work in progress, model weights and data will be made available soon. 
 
-Please refer to [INSTALL.md](docs/INSTALL.md) for installation instructions.
+Please refer to [GETTING_STARTED.md](docs/GETTING_STARTED.md) for instructions on how to begin.
 
